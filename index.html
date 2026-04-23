@@ -3,192 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NexAI | Sovereign Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+    <title>NexAI | Universal Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --neon: #10b981; --bg: #020617; --surface: #0f172a; --text: #f1f5f9; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --primary: #1a73e8; --bg: #ffffff; --text: #202124; --border: #dadce0; --ai-msg: #f1f3f4; --user-msg: #e8f0fe; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         
-        body { 
-            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); 
-            margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden;
-        }
+        body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; }
 
-        /* Mobil Header */
+        /* Header - Minimalist */
         header { 
-            padding: 15px; background: var(--surface); border-bottom: 1px solid #1e293b; 
-            text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            padding: 12px 20px; border-bottom: 1px solid var(--border); 
+            display: flex; justify-content: space-between; align-items: center; background: #fff; z-index: 10;
         }
-        header h1 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--neon); margin: 0; letter-spacing: 2px; }
+        header h1 { font-size: 1.2rem; margin: 0; color: var(--primary); font-weight: 600; }
+        .dev-tag { font-size: 0.7rem; background: #e8f0fe; color: var(--primary); padding: 4px 8px; border-radius: 4px; }
 
-        /* Duygusal Durum ve Sistem Barı */
-        #system-bar { 
-            display: flex; justify-content: space-around; background: #000; 
-            padding: 5px; font-size: 0.7rem; color: #64748b; font-weight: bold;
+        /* Sohbet Alanı */
+        #chat-window { 
+            flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; 
+            max-width: 900px; margin: 0 auto; width: 100%;
         }
-        .active-status { color: var(--neon); }
-
-        /* Mesaj Penceresi */
-        #chat-flow { 
-            flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;
-            scroll-behavior: smooth; background: radial-gradient(circle at top, #0f172a 0%, #020617 100%);
-        }
-        .bubble { padding: 12px 16px; border-radius: 18px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; position: relative; }
-        .user { align-self: flex-end; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border-bottom-right-radius: 2px; }
-        .ai { align-self: flex-start; background: var(--surface); border: 1px solid #1e293b; border-bottom-left-radius: 2px; }
+        .msg { padding: 12px 18px; border-radius: 20px; max-width: 80%; line-height: 1.5; font-size: 1rem; word-wrap: break-word; }
+        .ai { align-self: flex-start; background: var(--ai-msg); border-bottom-left-radius: 4px; color: var(--text); }
+        .user { align-self: flex-end; background: var(--user-msg); border-bottom-right-radius: 4px; color: #174ea6; }
 
         /* Multimodal Çıktılar */
-        pre { background: #000; padding: 10px; border-radius: 8px; overflow-x: auto; color: #38bdf8; font-family: monospace; font-size: 0.8rem; }
-        img.generated { width: 100%; border-radius: 12px; margin-top: 10px; border: 1px solid var(--neon); }
+        .generated-image { width: 100%; max-width: 500px; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        pre { background: #202124; color: #fff; padding: 15px; border-radius: 8px; font-size: 0.9rem; overflow-x: auto; width: 100%; }
 
-        /* Otonom Kontrol Paneli (Giriş) */
-        .control-panel { 
-            background: var(--surface); padding: 15px; border-top: 1px solid #1e293b; 
-            display: flex; flex-direction: column; gap: 10px;
+        /* Alt Mesaj Alanı (PC & Mobil Uyumlu) */
+        .input-container { 
+            border-top: 1px solid var(--border); padding: 15px 20px; background: #fff;
+            display: flex; justify-content: center;
         }
-        .input-row { display: flex; gap: 10px; align-items: center; }
-        input[type="text"] { 
-            flex: 1; background: #1e293b; border: 1px solid #334155; padding: 12px; 
-            border-radius: 25px; color: white; outline: none; font-size: 1rem;
+        .input-wrapper { 
+            max-width: 800px; width: 100%; background: #f1f3f4; border-radius: 30px; 
+            display: flex; align-items: center; padding: 5px 15px; border: 1px solid transparent; transition: 0.3s;
         }
-        .action-btn { 
-            width: 45px; height: 45px; border-radius: 50%; border: none; 
-            background: #1e293b; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-        #send-btn { background: var(--neon); color: #000; font-weight: bold; width: auto; border-radius: 20px; padding: 0 20px; }
+        .input-wrapper:focus-within { background: #fff; border-color: var(--primary); box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
 
-        /* Pulse Animasyonu (Ses Tanıma İçin) */
-        .pulse { animation: pulse-red 1.5s infinite; background: #ef4444 !important; }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        #user-input { flex: 1; border: none; background: transparent; padding: 12px; font-size: 1rem; outline: none; color: var(--text); }
+        .icon-btn { 
+            background: none; border: none; cursor: pointer; color: #5f6368; padding: 8px; 
+            border-radius: 50%; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .icon-btn:hover { background: rgba(0,0,0,0.05); color: var(--primary); }
+        #send-btn { color: var(--primary); font-weight: bold; }
+
+        /* Gizli Dosya Girişi */
+        #file-input { display: none; }
     </style>
 </head>
 <body>
 
-<div id="system-bar">
-    <span>SYNC: <span class="active-status">ONLINE</span></span>
-    <span>MEM: <span class="active-status" id="mem-count">0KB</span></span>
-    <span>EVOLUTION: <span class="active-status">v1.0.4</span></span>
-</div>
-
 <header>
-    <h1>NEXAI <small style="font-size: 0.6rem; vertical-align: middle;">SOVEREIGN</small></h1>
+    <h1>NexAI</h1>
+    <span class="dev-tag">DEVELOPER EDITION</span>
 </header>
 
-<div id="chat-flow">
-    <div class="bubble ai">Sistem çekirdeği yüklendi. Play Store dağıtımı için otonom mod aktif. Seni dinliyorum.</div>
+<div id="chat-window">
+    <div class="msg ai">Merhaba! Ben NexAI. Benimle her şeyi yapabilirsin: Kod yazabilir, resim tasarlayabilir veya internetteki en güncel bilgilere ulaşabilirsin. Bugün neyi şaşırtalım?</div>
 </div>
 
-<div class="control-panel">
-    <div class="input-row">
-        <button class="action-btn" onclick="document.getElementById('hidden-file').click()">📎</button>
-        <input type="file" id="hidden-file" hidden onchange="analyzeImage()">
+<div class="input-container">
+    <div class="input-wrapper">
+        <button class="icon-btn" onclick="document.getElementById('file-input').click()" title="Resim Yükle">📎</button>
+        <input type="file" id="file-input" accept="image/*" onchange="uploadImage()">
         
-        <input type="text" id="user-input" placeholder="Komut ver veya resim iste...">
+        <input type="text" id="user-input" placeholder="Mesajınızı yazın veya 'resim çiz' deyin..." autocomplete="off">
         
-        <button class="action-btn" id="mic-btn" onclick="startVoice()">🎤</button>
-        <button id="send-btn" onclick="handleLogic()">GÖNDER</button>
+        <button class="icon-btn" onclick="startSpeech()" title="Sesle Yaz">🎤</button>
+        <button class="icon-btn" id="send-btn" onclick="handleAction()">Gönder</button>
     </div>
 </div>
 
 <script>
-    // --- 1. HAFIZA VE ÖĞRENME (MEMORIZE) ---
-    let userHafiza = JSON.parse(localStorage.getItem('nexai_brain')) || [];
-    document.getElementById('mem-count').innerText = (JSON.stringify(userHafiza).length / 1024).toFixed(1) + "KB";
+    const input = document.getElementById('user-input');
+    const chatWindow = document.getElementById('chat-window');
 
-    function hafizayaYaz(input) {
-        userHafiza.push({t: Date.now(), q: input});
-        if(userHafiza.length > 50) userHafiza.shift();
-        localStorage.setItem('nexai_brain', JSON.stringify(userHafiza));
-    }
+    // Enter tuşu desteği
+    input.addEventListener("keypress", (e) => { if (e.key === "Enter") handleAction(); });
 
-    // --- 2. SESLİ ZEKA (VOICE SYNC) ---
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'tr-TR';
-    
-    function startVoice() {
-        document.getElementById('mic-btn').classList.add('pulse');
-        recognition.start();
-    }
+    async function handleAction() {
+        const text = input.value.trim();
+        if (!text) return;
 
-    recognition.onresult = (e) => {
-        document.getElementById('mic-btn').classList.remove('pulse');
-        document.getElementById('user-input').value = e.results[0][0].transcript;
-        handleLogic();
-    };
+        appendMsg('user', text);
+        input.value = "";
 
-    // --- 3. OTONOM MANTIK MOTORU (THE ENGINE) ---
-    async function handleLogic() {
-        const input = document.getElementById('user-input').value.trim();
-        if(!input) return;
-
-        appendMsg('user', input);
-        document.getElementById('user-input').value = "";
-        hafizayaYaz(input);
-
-        // Otonom Karar Mekanizması
-        if(input.toLowerCase().includes("resim") || input.toLowerCase().includes("çiz")) {
-            respondAI("🎨 Görsel motoru tetikleniyor... Geleceği hayal ediyorum.");
-            setTimeout(() => appendImg(`https://picsum.photos/seed/${Math.random()}/1080/1920`), 1500);
+        // Yapay Zeka Mantığı
+        if (text.toLowerCase().includes("resim") || text.toLowerCase().includes("çiz")) {
+            appendMsg('ai', `🎨 <b>"${text}"</b> komutu için görsel tasarlanıyor...`);
+            setTimeout(() => {
+                const img = document.createElement('img');
+                img.className = "generated-image";
+                img.src = `https://picsum.photos/seed/${Math.random()}/1024/1024`;
+                chatWindow.appendChild(img);
+                scroll();
+            }, 2000);
         } 
-        else if(input.toLowerCase().includes("kod") || input.toLowerCase().includes("yazılım")) {
-            respondAI("💻 Kod mimarisi oluşturuluyor. Hata ayıklama otonom olarak tamamlandı.");
-            appendCode(`// NexAI Otonom Kod Çıktısı\nexport const SmartModule = () => {\n  console.log("Sistem optimize edildi.");\n  return true;\n};`);
-        }
-        else if(input.toLowerCase().includes("kimsin") || input.toLowerCase().includes("ne yapabilirsin")) {
-            respondAI("Ben NexAI'yım. Play Store için tasarlanmış, kendi kodunu güncelleyebilen ve seninle biyolojik senkron kuran ilk egemen zekayım.");
+        else if (text.toLowerCase().includes("kod") || text.toLowerCase().includes("yazılım")) {
+            appendMsg('ai', "💻 İşte senin için hazırladığım profesyonel kod yapısı:");
+            const pre = document.createElement('pre');
+            pre.innerText = `// NexAI v2.0\nfunction optimizeSystem() {\n  const goal = "Surprise the world";\n  console.log("Kod otonom olarak üretildi.");\n}`;
+            chatWindow.appendChild(pre);
+            scroll();
         }
         else {
-            // Gelecek Tahmin ve Chat Modu
-            respondAI("İsteğini analiz ettim. Hafızamdaki verilerle birleştirerek en optimize sonucu üretiyorum...");
+            appendMsg('ai', "Bu isteğini analiz ettim. Mevcut modellerimden daha üstün bir performansla işleme alıyorum...");
         }
     }
 
-    // --- YARDIMCI GÖRSEL FONKSİYONLAR ---
     function appendMsg(sender, text) {
         const div = document.createElement('div');
-        div.className = `bubble ${sender}`;
+        div.className = `msg ${sender}`;
         div.innerHTML = text;
-        document.getElementById('chat-flow').appendChild(div);
-        scrollDown();
+        chatWindow.appendChild(div);
+        scroll();
     }
 
-    function respondAI(text) {
-        appendMsg('ai', text);
-        speak(text);
+    function scroll() { chatWindow.scrollTop = chatWindow.scrollHeight; }
+
+    // Ses Tanıma (Opsiyonel)
+    function startSpeech() {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'tr-TR';
+        recognition.start();
+        recognition.onresult = (e) => {
+            input.value = e.results[0][0].transcript;
+            handleAction();
+        };
     }
 
-    function appendImg(url) {
-        const img = document.createElement('img');
-        img.src = url;
-        img.className = 'generated';
-        document.getElementById('chat-flow').appendChild(img);
-        scrollDown();
-    }
-
-    function appendCode(code) {
-        const pre = document.createElement('pre');
-        pre.innerText = code;
-        document.getElementById('chat-flow').appendChild(pre);
-        scrollDown();
-    }
-
-    function scrollDown() {
-        const flow = document.getElementById('chat-flow');
-        flow.scrollTop = flow.scrollHeight;
-    }
-
-    function speak(text) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'tr-TR';
-        utterance.rate = 1.1;
-        window.speechSynthesis.speak(utterance);
-    }
-
-    function analyzeImage() {
-        appendMsg('user', "<i>Resim yüklendi (Analiz ediliyor...)</i>");
-        setTimeout(() => respondAI("Görseldeki nesneleri ve derinliği analiz ettim. Bu veriyi gelecekteki tahminlerim için hafızama alıyorum."), 1000);
+    function uploadImage() {
+        appendMsg('user', "<i>Bir resim yüklendi. Analiz moduna geçiliyor...</i>");
+        setTimeout(() => appendMsg('ai', "Resmi gördüm. İçeriği saniyeler içinde analiz edip sana raporlayabilirim."), 1000);
     }
 </script>
+
 </body>
 </html>
-
