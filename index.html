@@ -3,142 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NexAI | Universal Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
+    <title>NexAI | Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --bg: #ffffff; --text: #202124; --border: #dadce0; --ai-msg: #f1f3f4; --user-msg: #e8f0fe; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        :root { --primary: #1a73e8; --text: #202124; --bg: #ffffff; --ai-bg: #f8f9fa; --border: #dee2e6; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; }
 
-        /* Header - Minimalist */
+        /* Üst Bar */
         header { 
-            padding: 12px 20px; border-bottom: 1px solid var(--border); 
-            display: flex; justify-content: space-between; align-items: center; background: #fff; z-index: 10;
+            padding: 16px 20px; background: #fff; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
         }
-        header h1 { font-size: 1.2rem; margin: 0; color: var(--primary); font-weight: 600; }
-        .dev-tag { font-size: 0.7rem; background: #e8f0fe; color: var(--primary); padding: 4px 8px; border-radius: 4px; }
+        header h1 { font-size: 1.25rem; margin: 0; color: var(--primary); font-weight: 700; }
+        .status { font-size: 0.75rem; color: #5f6368; display: flex; align-items: center; }
+        .dot { height: 8px; width: 8px; background: #34a853; border-radius: 50%; margin-right: 6px; }
 
-        /* Sohbet Alanı */
+        /* Mesajlaşma Alanı */
         #chat-window { 
-            flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; 
-            max-width: 900px; margin: 0 auto; width: 100%;
+            flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px;
+            max-width: 800px; margin: 0 auto; width: 100%;
         }
-        .msg { padding: 12px 18px; border-radius: 20px; max-width: 80%; line-height: 1.5; font-size: 1rem; word-wrap: break-word; }
-        .ai { align-self: flex-start; background: var(--ai-msg); border-bottom-left-radius: 4px; color: var(--text); }
-        .user { align-self: flex-end; background: var(--user-msg); border-bottom-right-radius: 4px; color: #174ea6; }
+        .msg-row { display: flex; width: 100%; flex-direction: column; }
+        .msg { padding: 14px 18px; border-radius: 20px; max-width: 85%; font-size: 1rem; line-height: 1.5; }
+        
+        .ai { align-self: flex-start; background: var(--ai-bg); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; }
+        .user { align-self: flex-end; background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
 
-        /* Multimodal Çıktılar */
-        .generated-image { width: 100%; max-width: 500px; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        pre { background: #202124; color: #fff; padding: 15px; border-radius: 8px; font-size: 0.9rem; overflow-x: auto; width: 100%; }
+        /* Görsel ve Kod Çıktıları */
+        .output-img { width: 100%; border-radius: 16px; margin-top: 10px; border: 1px solid var(--border); }
+        pre { background: #1e1e1e; color: #dcdcdc; padding: 16px; border-radius: 12px; font-size: 0.85rem; overflow-x: auto; }
 
-        /* Alt Mesaj Alanı (PC & Mobil Uyumlu) */
-        .input-container { 
-            border-top: 1px solid var(--border); padding: 15px 20px; background: #fff;
-            display: flex; justify-content: center;
+        /* Alt Giriş Alanı (Mesaj Yazma Yeri) */
+        .input-area { 
+            padding: 20px; background: #fff; border-top: 1px solid var(--border);
+            display: flex; justify-content: center; align-items: center;
         }
-        .input-wrapper { 
-            max-width: 800px; width: 100%; background: #f1f3f4; border-radius: 30px; 
-            display: flex; align-items: center; padding: 5px 15px; border: 1px solid transparent; transition: 0.3s;
+        .input-box { 
+            max-width: 760px; width: 100%; background: #f1f3f4; border-radius: 30px;
+            display: flex; align-items: center; padding: 6px 16px; transition: 0.2s;
         }
-        .input-wrapper:focus-within { background: #fff; border-color: var(--primary); box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
-
-        #user-input { flex: 1; border: none; background: transparent; padding: 12px; font-size: 1rem; outline: none; color: var(--text); }
-        .icon-btn { 
-            background: none; border: none; cursor: pointer; color: #5f6368; padding: 8px; 
-            border-radius: 50%; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        .input-box:focus-within { background: #fff; box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2); }
+        
+        #user-input { 
+            flex: 1; border: none; background: transparent; padding: 12px; 
+            font-size: 1rem; outline: none; color: var(--text);
         }
-        .icon-btn:hover { background: rgba(0,0,0,0.05); color: var(--primary); }
-        #send-btn { color: var(--primary); font-weight: bold; }
-
-        /* Gizli Dosya Girişi */
-        #file-input { display: none; }
+        
+        .btn { background: none; border: none; cursor: pointer; color: #5f6368; padding: 8px; border-radius: 50%; transition: 0.2s; }
+        .btn:hover { background: rgba(0,0,0,0.05); color: var(--primary); }
+        .send-btn { color: var(--primary); font-weight: bold; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>NexAI</h1>
-    <span class="dev-tag">DEVELOPER EDITION</span>
+    <div class="status"><span class="dot"></span> Aktif</div>
 </header>
 
 <div id="chat-window">
-    <div class="msg ai">Merhaba! Ben NexAI. Benimle her şeyi yapabilirsin: Kod yazabilir, resim tasarlayabilir veya internetteki en güncel bilgilere ulaşabilirsin. Bugün neyi şaşırtalım?</div>
+    <div class="msg ai">Merhaba! Ben NexAI. Play Store için optimize edilmiş yeni arayüzümle hazırım. Neyi tasarlayalım?</div>
 </div>
 
-<div class="input-container">
-    <div class="input-wrapper">
-        <button class="icon-btn" onclick="document.getElementById('file-input').click()" title="Resim Yükle">📎</button>
-        <input type="file" id="file-input" accept="image/*" onchange="uploadImage()">
+<div class="input-area">
+    <div class="input-box">
+        <button class="btn" onclick="document.getElementById('img-up').click()">🖼️</button>
+        <input type="file" id="img-up" hidden onchange="imgHandle()">
         
-        <input type="text" id="user-input" placeholder="Mesajınızı yazın veya 'resim çiz' deyin..." autocomplete="off">
+        <input type="text" id="user-input" placeholder="Mesajınızı buraya yazın..." autocomplete="off">
         
-        <button class="icon-btn" onclick="startSpeech()" title="Sesle Yaz">🎤</button>
-        <button class="icon-btn" id="send-btn" onclick="handleAction()">Gönder</button>
+        <button class="btn" onclick="startMic()">🎤</button>
+        <button class="btn send-btn" onclick="send()">Gönder</button>
     </div>
 </div>
 
 <script>
     const input = document.getElementById('user-input');
-    const chatWindow = document.getElementById('chat-window');
+    const windowChat = document.getElementById('chat-window');
 
-    // Enter tuşu desteği
-    input.addEventListener("keypress", (e) => { if (e.key === "Enter") handleAction(); });
+    input.addEventListener("keypress", (e) => { if(e.key === "Enter") send(); });
 
-    async function handleAction() {
-        const text = input.value.trim();
-        if (!text) return;
+    function send() {
+        const val = input.value.trim();
+        if(!val) return;
 
-        appendMsg('user', text);
+        addMsg('user', val);
         input.value = "";
 
-        // Yapay Zeka Mantığı
-        if (text.toLowerCase().includes("resim") || text.toLowerCase().includes("çiz")) {
-            appendMsg('ai', `🎨 <b>"${text}"</b> komutu için görsel tasarlanıyor...`);
+        // Otonom Yanıt
+        if(val.toLowerCase().includes("çiz") || val.toLowerCase().includes("resim")) {
+            addMsg('ai', `🎨 "${val}" için görsel tasarlanıyor...`);
             setTimeout(() => {
-                const img = document.createElement('img');
-                img.className = "generated-image";
-                img.src = `https://picsum.photos/seed/${Math.random()}/1024/1024`;
-                chatWindow.appendChild(img);
+                const i = document.createElement('img');
+                i.src = `https://picsum.photos/seed/${Math.random()}/1024/1024`;
+                i.className = 'output-img';
+                windowChat.appendChild(i);
                 scroll();
-            }, 2000);
-        } 
-        else if (text.toLowerCase().includes("kod") || text.toLowerCase().includes("yazılım")) {
-            appendMsg('ai', "💻 İşte senin için hazırladığım profesyonel kod yapısı:");
-            const pre = document.createElement('pre');
-            pre.innerText = `// NexAI v2.0\nfunction optimizeSystem() {\n  const goal = "Surprise the world";\n  console.log("Kod otonom olarak üretildi.");\n}`;
-            chatWindow.appendChild(pre);
-            scroll();
-        }
-        else {
-            appendMsg('ai', "Bu isteğini analiz ettim. Mevcut modellerimden daha üstün bir performansla işleme alıyorum...");
+            }, 1500);
+        } else {
+            setTimeout(() => addMsg('ai', "Bu isteği analiz ettim. Hemen uyguluyorum."), 800);
         }
     }
 
-    function appendMsg(sender, text) {
-        const div = document.createElement('div');
-        div.className = `msg ${sender}`;
-        div.innerHTML = text;
-        chatWindow.appendChild(div);
+    function addMsg(s, t) {
+        const d = document.createElement('div');
+        d.className = `msg ${s}`;
+        d.innerHTML = t;
+        windowChat.appendChild(d);
         scroll();
     }
 
-    function scroll() { chatWindow.scrollTop = chatWindow.scrollHeight; }
-
-    // Ses Tanıma (Opsiyonel)
-    function startSpeech() {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'tr-TR';
-        recognition.start();
-        recognition.onresult = (e) => {
-            input.value = e.results[0][0].transcript;
-            handleAction();
-        };
+    function scroll() { windowChat.scrollTop = windowChat.scrollHeight; }
+    
+    function startMic() {
+        const r = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        r.lang = 'tr-TR'; r.start();
+        r.onresult = (e) => { input.value = e.results[0][0].transcript; send(); };
     }
 
-    function uploadImage() {
-        appendMsg('user', "<i>Bir resim yüklendi. Analiz moduna geçiliyor...</i>");
-        setTimeout(() => appendMsg('ai', "Resmi gördüm. İçeriği saniyeler içinde analiz edip sana raporlayabilirim."), 1000);
+    function imgHandle() {
+        addMsg('user', "<i>Resim yüklendi.</i>");
+        setTimeout(() => addMsg('ai', "Resmi inceledim, mükemmel görünüyor!"), 1000);
     }
 </script>
 
